@@ -15,8 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Portfolio | Developer Journey',
-  description: 'A cinematic portfolio experience',
+  title: '修仙記 · Cultivation Journey',
+  description: 'A cinematic portfolio experience — from chaos to enlightenment',
 }
 
 export default function RootLayout({

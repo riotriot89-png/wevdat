@@ -14,51 +14,56 @@ export default function SceneSignature() {
     if (!sectionRef.current) return
 
     const ctx = gsap.context(() => {
-      // Wireframe to real animation
-      gsap.from('.wireframe', {
+      // Formation circles activate
+      gsap.from('.formation-circle', {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
           end: 'center center',
           scrub: 1,
         },
-        strokeDashoffset: 2000,
+        scale: 0,
         opacity: 0,
+        stagger: 0.3,
+        ease: 'back.out(2)',
       })
 
-      gsap.to('.wireframe-fill', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 50%',
-          end: 'center center',
-          scrub: 1,
-        },
-        fillOpacity: 1,
-        strokeOpacity: 0,
-      })
-
-      // Text elements animate in
+      // Text reveals with golden light
       gsap.from('.sig-text', {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 60%',
-          end: 'top 30%',
+          end: 'top 20%',
           scrub: 1,
         },
-        y: 50,
+        y: 80,
         opacity: 0,
-        stagger: 0.1,
+        stagger: 0.2,
+        filter: 'blur(20px)',
       })
 
-      // Button appears last
-      gsap.from('.sig-button', {
+      // Seal stamp animation
+      gsap.from('.seal-stamp', {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'center center',
           end: 'bottom center',
           scrub: 1,
         },
-        scale: 0.8,
+        scale: 3,
+        opacity: 0,
+        rotation: -30,
+      })
+
+      // Before/After cards slide in
+      gsap.from('.compare-card', {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 50%',
+          end: 'bottom 50%',
+          scrub: 1,
+        },
+        x: (i) => (i === 0 ? -150 : 150),
         opacity: 0,
       })
     }, sectionRef)
@@ -69,186 +74,247 @@ export default function SceneSignature() {
   return (
     <section
       ref={sectionRef}
-      className="scene min-h-[150vh] bg-dark-900 relative overflow-hidden py-32"
+      className="scene min-h-[200vh] bg-void relative overflow-hidden py-32"
     >
+      {/* Background - Mystical formation pattern */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Large formation circle */}
+        <motion.div
+          className="formation-circle absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full border border-immortal-gold/10"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+        >
+          {/* Inner rings */}
+          <motion.div
+            className="absolute inset-10 rounded-full border border-spirit-cyan/10"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.div
+            className="absolute inset-20 rounded-full border border-jade-green/10"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.div
+            className="absolute inset-32 rounded-full border border-blood-crimson/10"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          />
+
+          {/* Rune marks */}
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-immortal-gold/20 text-2xl"
+              style={{
+                left: '50%',
+                top: '0',
+                transform: `translateX(-50%) rotate(${i * 45}deg)`,
+              }}
+            >
+              ☰
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Energy lines connecting to center */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute h-px bg-gradient-to-r from-transparent via-immortal-gold/20 to-transparent"
+            style={{
+              top: '25%',
+              left: '0',
+              right: '0',
+              transform: `rotate(${i * 30}deg)`,
+              transformOrigin: '50% 0%',
+            }}
+            animate={{
+              opacity: [0.1, 0.4, 0.1],
+              scaleX: [0.6, 1, 0.6],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              delay: i * 0.3,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Scene Title */}
       <motion.div
         className="absolute top-20 right-8 md:right-20 z-20 text-right"
         initial={{ opacity: 0, x: 50 }}
         whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 0.5 }}
+        transition={{ duration: 1.5, delay: 0.5 }}
       >
-        <span className="text-xs uppercase tracking-[0.3em] text-gray-500">Scene 04</span>
-        <h2 className="text-2xl md:text-4xl font-bold text-white mt-2">Dấu Ấn Riêng</h2>
-        <p className="text-sm text-gray-400 mt-1">From wireframe to masterpiece...</p>
+        <span className="text-xs uppercase tracking-[0.4em] text-immortal-gold/50">Scene 04</span>
+        <h2 className="text-3xl md:text-5xl font-bold gradient-fire text-glow-gold mt-3 mb-2">獨步天下</h2>
+        <p className="text-sm text-spirit-cyan/60">A unique style forged...</p>
       </motion.div>
 
-      <div className="max-w-6xl mx-auto px-8 mt-32">
-        {/* Wireframe to Real Transition */}
+      <div className="max-w-6xl mx-auto px-8 mt-32 relative z-10">
+        {/* Main Visual - Dao Forming */}
         <div className="relative">
-          {/* SVG Wireframe */}
-          <motion.svg
-            className="w-full max-w-2xl mx-auto"
-            viewBox="0 0 400 300"
+          {/* Central visual */}
+          <motion.div
+            className="relative w-full max-w-3xl mx-auto"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            {/* Background */}
-            <rect
-              x="10"
-              y="10"
-              width="380"
-              height="280"
-              rx="20"
-              fill="transparent"
-              stroke="#8b5cf6"
-              strokeWidth="2"
-              strokeDasharray="10 5"
-              className="wireframe"
+            {/* Outer glow */}
+            <motion.div
+              className="absolute inset-0 rounded-3xl"
+              style={{
+                background: 'radial-gradient(ellipse, rgba(212, 175, 55, 0.1) 0%, transparent 70%)',
+                filter: 'blur(40px)',
+              }}
+              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+              transition={{ duration: 5, repeat: Infinity }}
             />
 
-            {/* Header wireframe */}
-            <rect
-              x="30"
-              y="30"
-              width="100"
-              height="20"
-              rx="5"
-              fill="#8b5cf6"
-              fillOpacity="0"
-              stroke="#8b5cf6"
-              strokeWidth="1"
-              strokeDasharray="5 3"
-              className="wireframe wireframe-fill"
-            />
-
-            {/* Nav wireframe */}
-            <line x1="30" y1="70" x2="370" y2="70" stroke="#8b5cf6" strokeWidth="1" strokeDasharray="5 3" className="wireframe" />
-            {[80, 110, 140].map((y, i) => (
-              <rect
-                key={i}
-                x={30 + i * 100}
-                y={y}
-                width="60"
-                height="15"
-                rx="3"
-                fill="#06b6d4"
-                fillOpacity="0"
-                stroke="#06b6d4"
-                strokeWidth="1"
-                strokeDasharray="5 3"
-                className="wireframe wireframe-fill"
+            {/* Formation rings */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div
+                className="w-[400px] h-[400px] rounded-full border border-immortal-gold/20"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
               />
-            ))}
+              <motion.div
+                className="absolute w-[300px] h-[300px] rounded-full border border-spirit-cyan/15"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+              />
+              <motion.div
+                className="absolute w-[200px] h-[200px] rounded-full border border-jade-green/10"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+              />
+            </div>
 
-            {/* Main content wireframe */}
-            <rect
-              x="30"
-              y="160"
-              width="200"
-              height="110"
-              rx="10"
-              fill="#f43f5e"
-              fillOpacity="0"
-              stroke="#f43f5e"
-              strokeWidth="1"
-              strokeDasharray="5 3"
-              className="wireframe wireframe-fill"
-            />
-
-            {/* Sidebar wireframe */}
-            <rect
-              x="250"
-              y="160"
-              width="120"
-              height="110"
-              rx="10"
-              fill="#8b5cf6"
-              fillOpacity="0"
-              stroke="#8b5cf6"
-              strokeWidth="1"
-              strokeDasharray="5 3"
-              className="wireframe wireframe-fill"
-            />
-
-            {/* Decorative elements */}
-            <circle cx="350" cy="50" r="20" fill="#06b6d4" fillOpacity="0" stroke="#06b6d4" strokeWidth="1" className="wireframe wireframe-fill" />
-            <rect x="300" y="230" width="80" height="30" rx="5" fill="#8b5cf6" fillOpacity="0" stroke="#8b5cf6" strokeWidth="1" className="wireframe wireframe-fill" />
-          </motion.svg>
-
-          {/* Animated text overlay */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center">
+            {/* Central symbol */}
+            <div className="relative z-10 text-center py-20">
               <motion.p
-                className="sig-text text-xs uppercase tracking-[0.3em] text-gray-500 mb-4"
+                className="sig-text text-xs uppercase tracking-[0.5em] text-spirit-cyan/50 mb-6"
               >
-                Watch it transform
+                From Void to Form
               </motion.p>
               <motion.h3
-                className="sig-text text-2xl md:text-4xl font-bold gradient-text"
+                className="sig-text text-3xl md:text-5xl font-bold gradient-gold text-glow-gold"
               >
-                Wireframe → Reality
+                混沌 → 秩序
               </motion.h3>
-            </div>
-          </div>
-        </div>
-
-        {/* Comparison Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mt-24">
-          {/* Before */}
-          <motion.div
-            className="sig-text p-8 rounded-2xl bg-dark-800/50 border border-dashed border-gray-600"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="text-xs uppercase tracking-widest text-gray-500 mb-4 block">Before</span>
-            <div className="space-y-3">
-              <div className="h-4 bg-gray-700/50 rounded w-3/4" />
-              <div className="h-4 bg-gray-700/50 rounded w-1/2" />
-              <div className="h-20 bg-gray-700/30 rounded" />
-              <div className="flex gap-2">
-                <div className="h-8 bg-gray-700/30 rounded w-16" />
-                <div className="h-8 bg-gray-700/30 rounded w-16" />
-              </div>
+              <motion.p
+                className="sig-text text-sm text-white/40 mt-4 tracking-wider"
+              >
+                Chaos → Order
+              </motion.p>
             </div>
           </motion.div>
 
-          {/* After */}
+          {/* Seal stamp */}
           <motion.div
-            className="sig-text p-8 rounded-2xl bg-gradient-to-br from-accent-purple/20 to-accent-cyan/20 border border-accent-purple/30"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            className="seal-stamp absolute top-8 right-8 md:right-20 w-24 h-24 rounded-lg flex items-center justify-center"
+            style={{
+              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
+              border: '3px solid rgba(212, 175, 55, 0.5)',
+              boxShadow: '0 0 40px rgba(212, 175, 55, 0.3)',
+            }}
           >
-            <span className="text-xs uppercase tracking-widest text-accent-purple mb-4 block">After</span>
-            <div className="space-y-3">
-              <div className="h-4 bg-gradient-to-r from-accent-purple to-accent-cyan rounded w-3/4" />
-              <div className="h-4 bg-gray-500 rounded w-1/2" />
-              <div className="h-20 bg-gradient-to-br from-accent-purple/30 to-accent-cyan/30 rounded-lg border border-accent-purple/20" />
-              <div className="flex gap-3">
-                <div className="h-9 bg-accent-purple rounded-lg px-4 flex items-center justify-center text-sm font-medium">
-                  Explore
+            <span className="text-3xl font-bold text-immortal-gold">印</span>
+          </motion.div>
+        </div>
+
+        {/* Before/After Comparison */}
+        <div className="grid md:grid-cols-2 gap-8 mt-24">
+          {/* Before - Rough draft */}
+          <motion.div
+            className="compare-card p-8 rounded-2xl"
+            style={{
+              background: 'rgba(30, 20, 50, 0.5)',
+              border: '1px dashed rgba(255, 255, 255, 0.1)',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-immortal-gold/30 text-2xl">✗</span>
+              <span className="text-xs uppercase tracking-widest text-white/30">尋常之人</span>
+            </div>
+            <div className="space-y-4">
+              <div className="h-4 bg-white/5 rounded w-3/4" />
+              <div className="h-4 bg-white/5 rounded w-1/2" />
+              <div className="h-4 bg-white/5 rounded w-2/3" />
+              <div className="h-24 bg-white/5 rounded mt-6" />
+              <div className="flex gap-3 mt-4">
+                <div className="h-10 bg-white/5 rounded-lg w-20" />
+                <div className="h-10 bg-white/5 rounded-lg w-20" />
+              </div>
+            </div>
+            <p className="text-xs text-white/30 mt-6 font-calligraphy">— 普通之路 —</p>
+          </motion.div>
+
+          {/* After - Refined */}
+          <motion.div
+            className="compare-card p-8 rounded-2xl"
+            style={{
+              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%)',
+              border: '1px solid rgba(212, 175, 55, 0.3)',
+              boxShadow: '0 0 60px rgba(212, 175, 55, 0.1)',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-immortal-gold text-2xl">✓</span>
+              <span className="text-xs uppercase tracking-widest text-immortal-gold/70">道上之人</span>
+            </div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gradient-to-r from-immortal-gold to-spirit-cyan rounded w-3/4" />
+              <div className="h-4 bg-white/30 rounded w-1/2" />
+              <div className="h-4 bg-white/20 rounded w-2/3" />
+              <div
+                className="h-24 rounded-lg mt-6"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%)',
+                  border: '1px solid rgba(212, 175, 55, 0.2)',
+                }}
+              />
+              <div className="flex gap-3 mt-4">
+                <div
+                  className="h-10 rounded-lg px-5 flex items-center justify-center text-sm font-medium"
+                  style={{
+                    background: 'linear-gradient(135deg, #d4af37 0%, #f5e6a3 100%)',
+                    color: '#030308',
+                  }}
+                >
+                  探索
                 </div>
-                <div className="h-9 bg-dark-700 rounded-lg px-4 flex items-center justify-center text-sm text-gray-400">
-                  Learn More
+                <div
+                  className="h-10 rounded-lg px-5 flex items-center justify-center text-sm text-white/50"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  了解更多
                 </div>
               </div>
             </div>
+            <p className="text-xs text-immortal-gold/50 mt-6 font-calligraphy">— 天道之路 —</p>
           </motion.div>
         </div>
 
         {/* Signature Quote */}
         <motion.div
           className="mt-24 text-center"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.5 }}
         >
-          <p className="text-lg md:text-2xl text-gray-300 italic max-w-3xl mx-auto leading-relaxed">
-            "Design is not just what it looks like and feels like. 
-            Design is how it works — and how it makes people feel."
+          <p className="text-lg md:text-2xl text-spirit-white/80 italic max-w-3xl mx-auto leading-relaxed font-light">
+            "道可道，非常道。名可名，非常名。"
+          </p>
+          <p className="text-sm text-immortal-gold/50 mt-4 tracking-widest">
+            The dao that can be spoken is not the eternal dao.
           </p>
         </motion.div>
       </div>

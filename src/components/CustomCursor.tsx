@@ -11,8 +11,8 @@ export default function CustomCursor() {
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
 
-  const springX = useSpring(cursorX, { stiffness: 150, damping: 15 })
-  const springY = useSpring(cursorY, { stiffness: 150, damping: 15 })
+  const springX = useSpring(cursorX, { stiffness: 120, damping: 20 })
+  const springY = useSpring(cursorY, { stiffness: 120, damping: 20 })
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -59,41 +59,42 @@ export default function CustomCursor() {
       {/* Desktop Cursor */}
       <motion.div
         ref={cursorRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
         style={{
           x: springX,
           y: springY,
           opacity: isVisible ? 1 : 0,
         }}
       >
-        {/* Outer Ring */}
         <motion.div
           className="relative -translate-x-1/2 -translate-y-1/2"
           animate={{
-            scale: isHovering ? 1.5 : 1,
+            scale: isHovering ? 1.8 : 1,
           }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          {/* Glow Effect */}
+          {/* Outer ring - golden */}
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-all duration-300 ${
-              isHovering ? 'bg-accent-purple/30' : 'bg-white/10'
-            }`}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full transition-all duration-300"
             style={{
-              filter: 'blur(10px)',
+              background: isHovering ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.05)',
+              boxShadow: isHovering ? '0 0 30px rgba(212, 175, 55, 0.4)' : '0 0 15px rgba(212, 175, 55, 0.1)',
+              border: `1px solid ${isHovering ? 'rgba(212, 175, 55, 0.5)' : 'rgba(212, 175, 55, 0.2)'}`,
             }}
           />
 
-          {/* Main Cursor */}
+          {/* Main cursor - golden dot */}
           <div
-            className={`w-3 h-3 rounded-full transition-all duration-200 ${
-              isHovering ? 'bg-accent-purple' : 'bg-white'
-            }`}
+            className="w-3 h-3 rounded-full"
+            style={{
+              background: isHovering ? '#00d4ff' : '#d4af37',
+              boxShadow: isHovering ? '0 0 15px #00d4ff' : '0 0 15px #d4af37',
+            }}
           />
         </motion.div>
       </motion.div>
 
-      {/* Mobile Detection */}
+      {/* Mobile - hide cursor */}
       <style jsx global>{`
         @media (max-width: 768px) {
           * {
