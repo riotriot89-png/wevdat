@@ -281,6 +281,7 @@ export default function SceneUnderstanding() {
                 style={{
                   background: i % 2 === 0 ? '#d4af37' : '#00d4ff',
                   boxShadow: `0 0 15px ${i % 2 === 0 ? '#d4af37' : '#00d4ff'}`,
+                  transform: `rotate(${i * 60}deg) translateY(-120px)`,
                 }}
                 animate={{
                   rotate: 360,
@@ -290,9 +291,6 @@ export default function SceneUnderstanding() {
                   repeat: Infinity,
                   delay: i * -1.3,
                   ease: 'linear',
-                }}
-                style={{
-                  transform: `rotate(${i * 60}deg) translateY(-120px)`,
                 }}
               />
             ))}
